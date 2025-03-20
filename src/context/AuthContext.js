@@ -1,14 +1,18 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Create Context for storing authentication data
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+
   // State for user authentication
   const [user, setUser] = useState(null);
-
   const [blogs, setBlogs] = useState([]);
 
+
+  // Load blogs from API when app starts
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -31,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Signup function
-  const signup = (name, email, password, navigate) => {
+  const signup = (name, email, password) => {
     const users = JSON.parse(localStorage.getItem("users")) || [];
     
     // Check if user already exists
@@ -52,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Login function
-  const login = (email, password, navigate) => {
+  const login = (email, password) => {
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const existingUser = users.find((u) => u.email === email && u.password === password);
 
@@ -67,13 +71,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Logout function
-  const logout = (navigate) => {
+  const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
     navigate("/login");
   };
 
   return (
+    // Provide AuthContext with user, signup, login, blogs, and logout functions to children components.
     <AuthContext.Provider value={{ user, signup, login, blogs, logout }}>
       {children}
     </AuthContext.Provider>

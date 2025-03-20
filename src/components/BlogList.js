@@ -3,17 +3,26 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const BlogList = () => {
+
+  // Get blogs from AuthContext API
+
   const { blogs } = useContext(AuthContext);
+
+  // State for search input
   const [search, setSearch] = useState("");
 
   return (
     <div style={styles.container}>
+
+      
       <input
         type="text"
         placeholder="Search blog posts..."
         onChange={(e) => setSearch(e.target.value)}
         style={styles.searchInput}
       />
+
+      {/* Blog list */}  
       <ul style={styles.list}>
         {blogs
           .filter((blog) => blog.title.toLowerCase().includes(search.toLowerCase()))

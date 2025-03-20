@@ -9,17 +9,20 @@ import Signup from "./page/Signup";
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
+    // Wrap everything inside Router
+    <Router>
+      <AuthProvider>
+        {/* Navbar component */}
         <Navbar />
         <Routes>
+          {/* Default route for BlogList */}
           <Route path="/" element={<BlogList />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 
