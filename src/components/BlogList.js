@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { BlogContext } from "../context/BlogContext";
+import { AuthContext } from "../context/AuthContext";
 
 const BlogList = () => {
-  const { blogs } = useContext(BlogContext);
+  const { blogs } = useContext(AuthContext);
   const [search, setSearch] = useState("");
 
   return (

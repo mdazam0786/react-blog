@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { BlogContext } from "../context/BlogContext";
+import { AuthContext } from "../context/AuthContext";
 
 const BlogDetail = () => {
   const { id } = useParams();
-  const { blogs } = useContext(BlogContext);
+  const { blogs } = useContext(AuthContext);
   const blog = blogs.find((b) => b.id === parseInt(id));
 
   // State for likes and comments
@@ -12,12 +12,7 @@ const BlogDetail = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  if (!blog) return <div className="text-center text-lg">Loading...</div>;
-
-  // Function to handle likes
-  const handleLike = () => {
-    setLikes(likes + 1);
-  };
+  if (!blog) return <div className="text-center fs-4">Loading...</div>;
 
   // Function to handle adding comments
   const handleAddComment = () => {
@@ -28,61 +23,49 @@ const BlogDetail = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      {/* Blog Title */}
-      <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
+    <div className="container mt-4">
+      <div className="card shadow-sm p-4">
+        <h1 className="fw-bold">{blog.title}</h1>
+        <p className="mt-3 text-secondary">{blog.body}</p>
 
-      {/* Blog Content */}
-      <p className="text-gray-700 mb-4">{blog.body}</p>
+        {/* Like Button with Different Color Count */}
+        <button
+          onClick={() => setLikes(likes + 1)}
+          className="btn btn-primary mt-3"
+        >
+          👍 Like <span className="fw-bold text-warning">{likes}</span>
+        </button>
 
-      {/* Like Button */}
-      <button
-        onClick={handleLike}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-      >
-        👍 Like {likes}
-      </button>
-
-      {/* Comment Section */}
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-2">Comments</h2>
-        <ul className="mb-4">
-          {comments.length === 0 ? (
-            <p className="text-gray-500">No comments yet.</p>
-          ) : (
-            comments.map((comment, index) => (
-              <li key={index} className="bg-gray-100 p-2 rounded my-2">
-                {comment}
-              </li>
-            ))
-          )}
-        </ul>
-
-        {/* Comment Input */}
-        <div className="flex gap-2">
+        {/* Comments Section */}
+        <div className="mt-4">
+          <h2 className="fs-4">Comments</h2>
           <input
             type="text"
-            placeholder="Write a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="border p-2 rounded w-full"
+            className="form-control mt-2"
+            placeholder="Add a comment..."
           />
           <button
             onClick={handleAddComment}
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
+            className="btn btn-success mt-2"
           >
-            Add
+            Add Comment
           </button>
-        </div>
-      </div>
 
-      {/* Back to List Button */}
-      <div className="mt-6">
-        <Link
-          to="/"
-          className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
-        >
-          Back to Blog List
+          {/* Display Comments */}
+          <ul className="list-group mt-3">
+            {comments.map((comment, index) => (
+              <li key={index} className="list-group-item">
+                {comment}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Back to List Button */}
+        <Link to="/" className="btn btn-link mt-4">
+          Back to List
         </Link>
       </div>
     </div>

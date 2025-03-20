@@ -1,47 +1,39 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate(); // ✅ Initialize navigate function
+
+  const handleLogout = () => {
+    logout(navigate); // ✅ Pass navigate when calling logout
+  };
+
   return (
-    <nav style={styles.navbar}>
-      <h1 style={styles.logo}>📝 My Blog</h1>
-      <ul style={styles.navLinks}>
-        <li>
-          <Link to="/" style={styles.link}>Home</Link>
+    <nav className="navbar navbar-light bg-light px-3">
+      <h1 className="navbar-brand">📝 My Blog</h1>
+      <ul className="nav">
+        <li className="nav-item">
+          <Link to="/" className="nav-link">Home</Link>
         </li>
-        <li>
-          <Link to="/" style={styles.link}>Blog List</Link>
-        </li>
+        {user ? (
+          <li className="nav-item">
+            <button onClick={handleLogout} className="btn btn-danger">Logout</button>
+          </li>
+        ) : (
+          <>
+            <li className="nav-item">
+              <Link to="/login" className="nav-link">Login</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/signup" className="nav-link">Signup</Link>
+            </li>
+          </>
+        )}
       </ul>
     </nav>
   );
-};
-
-// Basic Styles for the Navbar
-const styles = {
-  navbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "15px 20px",
-    backgroundColor: "#2c3e50", // Dark blue-gray
-    color: "white",
-  },
-  logo: {
-    fontSize: "1.8rem",
-    fontWeight: "bold",
-  },
-  navLinks: {
-    listStyle: "none",
-    display: "flex",
-    gap: "20px",
-  },
-  link: {
-    textDecoration: "none",
-    color: "white",
-    fontSize: "1.2rem",
-    transition: "0.3s",
-  },
 };
 
 export default Navbar;
